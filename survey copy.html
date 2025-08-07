@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Perfect Cambodia Tour | Khmer Explorer</title>
+    <style>
+        :root {
+            --primary: #f8b864;
+            --primary-dark: #e6a352;
+            --dark: #333;
+            --light: #f9f9f9;
+            --gray: #eee;
+            --dark-gray: #777;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .survey-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .survey-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .survey-header img {
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+        
+        .survey-header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .survey-header p {
+            color: var(--dark-gray);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: var(--gray);
+            border-radius: 3px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-container {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+        
+        .question-container.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .option-card {
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .option-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .option-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(248, 184, 100, 0.1);
+        }
+        
+        .option-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .text-option {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease;
+        }
+        
+        .text-option:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--gray);
+            color: var(--dark-gray);
+        }
+        
+        .btn-outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .result-container {
+            text-align: center;
+            padding: 2rem;
+            display: none;
+        }
+        
+        .result-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .result-container p {
+            margin-bottom: 2rem;
+            color: var(--dark-gray);
+        }
+        
+        .tour-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .tour-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .tour-details {
+            padding: 1.5rem;
+        }
+        
+        .tour-details h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tour-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+        
+        .tour-price {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin: 1rem 0;
+        }
+        
+        .btn-view {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-view:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="survey-container">
+        <div class="survey-header">
+            <img src="img/logo.png" alt="Khmer Explorer">
+            <h1>Find Your Perfect Cambodia Tour</h1>
+            <p>Answer a few questions and we'll recommend tours tailored just for you</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
+        </div>
+        
+        <!-- Question 1 -->
+        <div class="question-container active" id="question-1">
+            <div class="question-text">
+                When are you planning to visit Cambodia?
+            </div>
+            <input type="date" class="text-option" id="travel-date" placeholder="Select your travel date">
+            <div class="btn-container">
+                <button class="btn btn-outline" disabled>Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(1)">Next</button>
+            </div>
+        </div>
+        
+        <!-- Question 2 -->
+        <div class="question-container" id="question-2">
+            <div class="question-text">
+                Who are you traveling with?
+            </div>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'solo')">
+                    <i class="fas fa-user"></i>
+                    <p>Solo</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'couple')">
+                    <i class="fas fa-heart"></i>
+                    <p>Couple</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'family')">
+                    <i class="fas fa-users"></i>
+                    <p>Family</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'friends')">
+                    <i class="fas fa-user-friends"></i>
+                    <p>Friends</p>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="prevQuestion(2)">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(2)">Next</button>
+            </div>
+        </div>
+        
+        <!-- Question 3 -->
+        <div class="question-container" id="question-3">
+            <div class="question-text">
+                What type of experiences interest you most?
+            </div>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'culture')">
+                    <i class="fas fa-landmark"></i>
+                    <p>Culture & History</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'adventure')">
+                    <i class="fas fa-hiking"></i>
+                    <p>Adventure</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'nature')">
+                    <i class="fas fa-tree"></i>
+                    <p>Nature</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'food')">
+                    <i class="fas fa-utensils"></i>
+                    <p>Food & Local Life</p>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="prevQuestion(3)">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(3)">Next</button>
+            </div>
+        </div>
+        
+        <!-- Question 4 -->
+        <div class="question-container" id="question-4">
+            <div class="question-text">
+                What's your preferred travel pace?
+            </div>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'relaxed')">
+                    <i class="fas fa-umbrella-beach"></i>
+                    <p>Relaxed</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'moderate')">
+                    <i class="fas fa-walking"></i>
+                    <p>Moderate</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'active')">
+                    <i class="fas fa-running"></i>
+                    <p>Active</p>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="prevQuestion(4)">Back</button>
+                <button class="btn btn-primary" onclick="nextQuestion(4)">Next</button>
+            </div>
+        </div>
+        
+        <!-- Question 5 -->
+        <div class="question-container" id="question-5">
+            <div class="question-text">
+                What's your approximate budget per person?
+            </div>
+            <div class="options-grid">
+                <div class="option-card" onclick="selectOption(this, 'budget')">
+                    <i class="fas fa-wallet"></i>
+                    <p>$20-$50/day</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'midrange')">
+                    <i class="fas fa-hotel"></i>
+                    <p>$50-$100/day</p>
+                </div>
+                <div class="option-card" onclick="selectOption(this, 'luxury')">
+                    <i class="fas fa-gem"></i>
+                    <p>$100+/day</p>
+                </div>
+            </div>
+            <div class="btn-container">
+                <button class="btn btn-outline" onclick="prevQuestion(5)">Back</button>
+                <button class="btn btn-primary" onclick="showResults()">See My Matches</button>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="result-container" id="results">
+            <h2>We Found Perfect Tours For You!</h2>
+            <p>Based on your preferences, we recommend these experiences in Cambodia</p>
+            
+            <!-- Tour Recommendation 1 -->
+            <div class="tour-card">
+                <div class="tour-image" style="background-image: url('img/angkor.jpg');"></div>
+                <div class="tour-details">
+                    <h3>Angkor Wat Sunrise Experience</h3>
+                    <div class="tour-meta">
+                        <span><i class="fas fa-clock"></i> 1 day</span>
+                        <span><i class="fas fa-user-friends"></i> Small group</span>
+                    </div>
+                    <p>Witness the magical sunrise over Cambodia's iconic temple complex with our expert guides who bring the ancient Khmer civilization to life.</p>
+                    <div class="tour-price">From $65 per person</div>
+                    <a href="#" class="btn-view">View Tour</a>
+                </div>
+            </div>
+            
+            <!-- Tour Recommendation 2 -->
+            <div class="tour-card">
+                <div class="tour-image" style="background-image: url('img/kampot.jpg');"></div>
+                <div class="tour-details">
+                    <h3>Kampot Pepper Plantation & River Cruise</h3>
+                    <div class="tour-meta">
+                        <span><i class="fas fa-clock"></i> Full day</span>
+                        <span><i class="fas fa-user-friends"></i> Private tour</span>
+                    </div>
+                    <p>Discover why Kampot pepper is world-renowned, then unwind on a scenic sunset cruise along the river with local snacks and drinks.</p>
+                    <div class="tour-price">From $45 per person</div>
+                    <a href="#" class="btn-view">View Tour</a>
+                </div>
+            </div>
+            
+            <!-- Tour Recommendation 3 -->
+            <div class="tour-card">
+                <div class="tour-image" style="background-image: url('img/phnompenh.jpg');"></div>
+                <div class="tour-details">
+                    <h3>Phnom Penh Cultural Discovery</h3>
+                    <div class="tour-meta">
+                        <span><i class="fas fa-clock"></i> 2 days</span>
+                        <span><i class="fas fa-user-friends"></i> Small group</span>
+                    </div>
+                    <p>Explore Cambodia's vibrant capital through its food, history and people on this immersive tour including the Royal Palace and local markets.</p>
+                    <div class="tour-price">From $75 per person</div>
+                    <a href="#" class="btn-view">View Tour</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store user responses
+        const userResponses = {
+            travelDate: '',
+            travelCompanions: '',
+            interests: '',
+            pace: '',
+            budget: ''
+        };
+        
+        // Track current question
+        let currentQuestion = 1;
+        const totalQuestions = 5;
+        
+        // Update progress bar
+        function updateProgress() {
+            const progress = (currentQuestion / totalQuestions) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+        
+        // Select option for multiple choice questions
+        function selectOption(element, value) {
+            // Remove selected class from all options in this question
+            const parent = element.parentElement;
+            const options = parent.querySelectorAll('.option-card');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Store the value based on current question
+            if (currentQuestion === 2) userResponses.travelCompanions = value;
+            if (currentQuestion === 3) userResponses.interests = value;
+            if (currentQuestion === 4) userResponses.pace = value;
+            if (currentQuestion === 5) userResponses.budget = value;
+        }
+        
+        // Handle date input for question 1
+        document.getElementById('travel-date').addEventListener('change', function() {
+            userResponses.travelDate = this.value;
+        });
+        
+        // Navigate to next question
+        function nextQuestion(current) {
+            // Validate response
+            if (current === 1 && !userResponses.travelDate) {
+                alert('Please select your travel date');
+                return;
+            }
+            if (current === 2 && !userResponses.travelCompanions) {
+                alert('Please select who you\'re traveling with');
+                return;
+            }
+            if (current === 3 && !userResponses.interests) {
+                alert('Please select your interests');
+                return;
+            }
+            if (current === 4 && !userResponses.pace) {
+                alert('Please select your preferred pace');
+                return;
+            }
+            
+            // Hide current question
+            document.getElementById(`question-${current}`).classList.remove('active');
+            
+            // Show next question
+            currentQuestion = current + 1;
+            document.getElementById(`question-${currentQuestion}`).classList.add('active');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Navigate to previous question
+        function prevQuestion(current) {
+            // Hide current question
+            document.getElementById(`question-${current}`).classList.remove('active');
+            
+            // Show previous question
+            currentQuestion = current - 1;
+            document.getElementById(`question-${currentQuestion}`).classList.add('active');
+            
+            // Update progress
+            updateProgress();
+        }
+        
+        // Show results
+        function showResults() {
+            // Validate response
+            if (!userResponses.budget) {
+                alert('Please select your budget');
+                return;
+            }
+            
+            // Hide last question
+            document.getElementById(`question-${totalQuestions}`).classList.remove('active');
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Here you would typically send the userResponses to your backend
+            // and receive personalized recommendations
+            console.log('User responses:', userResponses);
+            
+            // For demo, we're just showing some sample tours
+        }
+    </script>
+</body>
+</html>
